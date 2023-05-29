@@ -1,5 +1,4 @@
 using Xunit;
-using CodahaleShamir;
 using CodahaleShamir.GF256;
 using System.Collections.Generic;
 using System;

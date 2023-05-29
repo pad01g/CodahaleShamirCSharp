@@ -1,5 +1,4 @@
 using Xunit;
-// using CodahaleShamir;
 using CodahaleShamir.Scheme;
 using System.Collections.Generic;
 using System;
