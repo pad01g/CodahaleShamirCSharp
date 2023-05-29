@@ -1,4 +1,5 @@
 using GF256;
+using System.Collections.Generic;
 
 namespace Scheme;
 public class Scheme
@@ -18,7 +19,7 @@ public class Scheme
     * @return {Object.<string, Uint8Array>} an map of {@code n} parts that are arrays of bytes of the
     * secret length
     */
-    public uint[][] split(Func<uint, uint[]> randomBytes, uint n, uint k, uint[] secret) {
+    public Dictionary<string, uint[]> split(Func<uint, uint[]> randomBytes, uint n, uint k, uint[] secret) {
         if (k <= 1) throw new Exception("K must be > 1");
         if (n < k) throw new Exception("N must be >= K");
         if (n > 255) throw new Exception("N must be <= 255");
@@ -37,11 +38,12 @@ public class Scheme
             }
         }
 
-        uint[][] parts = new uint[(uint)values.Length][];
+        // uint[][] parts = new uint[(uint)values.Length][];
+        Dictionary<string, uint[]> parts = new Dictionary<string, uint[]>();
 
-        // this is zero-index, not 1-index of original
+        // this is 1-index as original
         for (uint i = 0; i < (uint)values.Length; i++) {
-            parts[i] = values[i];
+            parts.Add((i+1).ToString(), values[i]);
         }
 
         return parts;
@@ -60,11 +62,13 @@ public class Scheme
     * @return {Uint8Array} the original secret
     *
     */
-    public uint[] join(uint[][] parts) {
-        if (parts.Length == 0) throw new Exception("No parts provided");
-        uint[] lengths = new uint[(uint)parts.Length]; // Object.values(parts).map(x => x.length);
-        for (uint i = 0; i < (uint)parts.Length; i++){
-            lengths[i] = (uint)parts[i].Length;
+    public uint[] join(Dictionary<string, uint[]> parts) {
+        if (parts.Count == 0) throw new Exception("No parts provided");
+        uint[] lengths = new uint[(uint)parts.Count];
+        uint lengthIndex = 0;
+        foreach(KeyValuePair<string, uint[]> part in parts) {
+            lengths[lengthIndex] = (uint) part.Value.Length;
+            lengthIndex++;
         }
         uint max = lengths.Max();
         uint min = lengths.Min();
@@ -74,10 +78,10 @@ public class Scheme
         uint[] secret = new uint[max];
         // eslint-disable-next-line no-plusplus
         for (uint i = 0; i < (uint)secret.Length; i++) {
-            uint[] keys = new uint[(uint)parts.Length];
-            for(uint j = 0; j < parts.Length; j++){
-                keys[j] = j;
-            }
+
+            string[] keys = new string[parts.Keys.Count];
+            parts.Keys.CopyTo(keys, 0);
+
             uint[][] points = new uint[keys.Length][];
             for(uint j = 0; j < points.Length; j++){
                 points[j] = new uint[]{0, 0};
@@ -85,8 +89,8 @@ public class Scheme
             
             // eslint-disable-next-line no-plusplus
             for (uint j = 0; j < keys.Length; j++) {
-                uint key = keys[j];
-                uint k = key + 1;
+                string key = keys[j];
+                uint k = uint.Parse(key);
                 points[j][0] = k;
                 points[j][1] = parts[key][i];
             }
