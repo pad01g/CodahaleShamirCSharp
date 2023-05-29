@@ -19,27 +19,27 @@ public class Scheme
     * @return {Object.<string, Uint8Array>} an map of {@code n} parts that are arrays of bytes of the
     * secret length
     */
-    public Dictionary<string, uint[]> split(Func<uint, uint[]> randomBytes, uint n, uint k, uint[] secret) {
+    public Dictionary<string, byte[]> split(Func<uint, byte[]> randomBytes, byte n, byte k, byte[] secret) {
         if (k <= 1) throw new Exception("K must be > 1");
         if (n < k) throw new Exception("N must be >= K");
         if (n > 255) throw new Exception("N must be <= 255");
 
-        uint[][] values = new uint[n][];
+        byte[][] values = new byte[n][];
         for(int i=0; i<(uint)values.Length; i++ ){
-            values[i] = new uint[(uint)secret.Length];
+            values[i] = new byte[(uint)secret.Length];
         }
 
         // eslint-disable-next-line no-plusplus
         for (uint i = 0; i < (uint)secret.Length; i++) {
-            uint[] p = gf256.generate(randomBytes, k - 1, secret[i]);
+            byte[] p = gf256.generate(randomBytes, (uint)(k - 1), secret[i]);
             // eslint-disable-next-line no-plusplus
-            for (uint x = 1; x <= n; x++) {
+            for (byte x = 1; x <= n; x++) {
                 values[x - 1][i] = gf256.eval(p, x);
             }
         }
 
         // uint[][] parts = new uint[(uint)values.Length][];
-        Dictionary<string, uint[]> parts = new Dictionary<string, uint[]>();
+        Dictionary<string, byte[]> parts = new Dictionary<string, byte[]>();
 
         // this is 1-index as original
         for (uint i = 0; i < (uint)values.Length; i++) {
@@ -62,11 +62,11 @@ public class Scheme
     * @return {Uint8Array} the original secret
     *
     */
-    public uint[] join(Dictionary<string, uint[]> parts) {
+    public byte[] join(Dictionary<string, byte[]> parts) {
         if (parts.Count == 0) throw new Exception("No parts provided");
         uint[] lengths = new uint[(uint)parts.Count];
         uint lengthIndex = 0;
-        foreach(KeyValuePair<string, uint[]> part in parts) {
+        foreach(KeyValuePair<string, byte[]> part in parts) {
             lengths[lengthIndex] = (uint) part.Value.Length;
             lengthIndex++;
         }
@@ -75,22 +75,22 @@ public class Scheme
         if (max != min) {
             throw new Exception($"Varying lengths of part values. Min {min}, Max {max}");
         }
-        uint[] secret = new uint[max];
+        byte[] secret = new byte[max];
         // eslint-disable-next-line no-plusplus
         for (uint i = 0; i < (uint)secret.Length; i++) {
 
             string[] keys = new string[parts.Keys.Count];
             parts.Keys.CopyTo(keys, 0);
 
-            uint[][] points = new uint[keys.Length][];
+            byte[][] points = new byte[keys.Length][];
             for(uint j = 0; j < points.Length; j++){
-                points[j] = new uint[]{0, 0};
+                points[j] = new byte[]{0, 0};
             }
             
             // eslint-disable-next-line no-plusplus
             for (uint j = 0; j < keys.Length; j++) {
                 string key = keys[j];
-                uint k = uint.Parse(key);
+                byte k = byte.Parse(key);
                 points[j][0] = k;
                 points[j][1] = parts[key][i];
             }

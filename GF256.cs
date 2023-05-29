@@ -2,14 +2,14 @@
 
 public class Field
 {
-    public static uint add(uint a, uint b) {
-        return a^b;
+    public static byte add(byte a, byte b) {
+        return (byte)(a^b);
     }
-    public static uint sub(uint a, uint b) {
+    public static byte sub(byte a, byte b) {
         return add(a, b);
     }
 
-    public static uint[] LOG = new uint[] {
+    public static byte[] LOG = new byte[] {
         0xff, 0x00, 0x19, 0x01, 0x32, 0x02, 0x1a,
         0xc6, 0x4b, 0xc7, 0x1b, 0x68, 0x33, 0xee,
         0xdf, 0x03, 0x64, 0x04, 0xe0, 0x0e, 0x34,
@@ -49,7 +49,7 @@ public class Field
         0xc0, 0xf7, 0x70, 0x07,
     };
 
-    private static uint[] EXP = new uint[] {
+    private static byte[] EXP = new byte[] {
         0x01, 0x03, 0x05, 0x0f, 0x11, 0x33, 0x55,
         0xff, 0x1a, 0x2e, 0x72, 0x96, 0xa1, 0xf8,
         0x13, 0x35, 0x5f, 0xe1, 0x38, 0x48, 0xd8,
@@ -125,20 +125,20 @@ public class Field
         0x24, 0x6c, 0xb4, 0xc7, 0x52, 0xf6,
     };
 
-    public uint mul(uint a, uint b) {
+    public byte mul(byte a, byte b) {
         if (a == 0 || b == 0) {
             return 0;
         }
         return EXP[LOG[a] + LOG[b]];
     }
 
-    public uint div(uint a, uint b) {
+    public byte div(byte a, byte b) {
         // multiply by the inverse of b
         return mul(a, EXP[255 - LOG[b]]);
     }
 
 
-    public uint degree(uint[] p) {
+    public uint degree(byte[] p) {
         for (uint i = ((uint) p.Length) - 1; i >= 1; i--) {
             if (p[i] != 0) {
                 return i;
@@ -151,16 +151,16 @@ public class Field
     * Calculates f(0) of the given points using Lagrangian interpolation.
     * @param  {array[Uint8Array]} points The supplied point.
     */
-    public uint interpolate(uint[][] points) {
-        const uint x = 0;
-        uint y = 0;
+    public byte interpolate(byte[][] points) {
+        const byte x = 0;
+        byte y = 0;
         for (uint i = 0; i < ((uint)points.Length); i++) {
-            uint aX = points[i][0];
-            uint aY = points[i][1];
-            uint li = 1;
+            byte aX = points[i][0];
+            byte aY = points[i][1];
+            byte li = 1;
             // eslint-disable-next-line no-plusplus
             for (uint j = 0; j < ((uint)points.Length); j++) {
-                uint bX = points[j][0];
+                byte bX = points[j][0];
                 if (i != j) {
                     li = mul(li, div(sub(x, bX), sub(aX, bX)));
                 }
@@ -178,8 +178,8 @@ public class Field
     * @param {Number} x The point to hide.
     * @return {Uint8Array} The random polynomial with x as the fist coefficient.
     */
-    public uint[] generate(Func<uint, uint[]> randomBytes, uint d, uint x) {
-        uint[] p = {};
+    public byte[] generate(Func<uint, byte[]> randomBytes, uint d, byte x) {
+        byte[] p = {};
         // generate random polynomials until we find one of the given degree
         do {
             p = randomBytes(d + 1);
@@ -196,8 +196,8 @@ public class Field
     * @param  {Uint8Array} p The polynomial
     * @return {Number} x The point to evaluate.
     */
-    public uint eval(uint[] p, uint x) {
-        uint result = 0;
+    public byte eval(byte[] p, byte x) {
+        byte result = 0;
         // eslint-disable-next-line no-plusplus
         for (uint i = ((uint)p.Length - 1); i >= 0; i--) {
             result = add(mul(result, x), p[i]);
