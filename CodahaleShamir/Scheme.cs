@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace CodahaleShamir.Scheme
 {
-    public class Scheme
+    public class ShamirScheme
     {
         public Field gf256;
-        public Scheme(){
+        public ShamirScheme(){
             gf256 = new Field();
         }
         /**

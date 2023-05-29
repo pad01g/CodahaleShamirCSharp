@@ -9,10 +9,6 @@ namespace CodahaleShamir.Tests
 
     public class GF256Test
     {
-        public byte[] randomBytes(uint size) {
-            return new byte[]{};
-        }
-
         [Fact]
         public void GF256TestsAdd()
         {

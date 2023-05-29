@@ -200,7 +200,6 @@
             byte result = 0;
             // eslint-disable-next-line no-plusplus
             for (int i = p.Length - 1; i >= 0; i--) {
-                Console.Write($"p: {p}, i: {i}");
                 result = add(mul(result, x), p[i]);
             }
             return result;
