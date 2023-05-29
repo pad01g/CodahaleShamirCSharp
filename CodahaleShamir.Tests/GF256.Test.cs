@@ -2,6 +2,7 @@ using Xunit;
 using CodahaleShamir;
 using CodahaleShamir.GF256;
 using System.Collections.Generic;
+using System;
 
 namespace CodahaleShamir.Tests
 {
@@ -196,7 +197,9 @@ namespace CodahaleShamir.Tests
 
         public int countDownFrom2 = 2;
         public byte[] zeroLastByteFirstTWoAttemptsRandomBytes(uint length) {
-            byte[] p = randomBytes(length);
+            byte[] p = new byte[length];
+            Random rnd = new Random();
+            rnd.NextBytes(p);
             if (countDownFrom2 >= 0){
                 p[p.Length - 1] = 0;
                 countDownFrom2--;
@@ -204,27 +207,14 @@ namespace CodahaleShamir.Tests
             return p;
         }
 
-        // const zeroLastByteFirstTWoAttemptsRandomBytes = function (length) {
-        // const p = randomBytes(length);
-        // if (countDownFrom2 >= 0) {
-        //     p[p.length - 1] = 0;
-        //     countDownFrom2--;
-        // }
-        // return p;
-        // };
-
-        // test('GF256Tests generate', function (t) {
-        //     const p = GF256.generate(zeroLastByteFirstTWoAttemptsRandomBytes, 5, 20);
-        //     t.equal(p[0], 20);
-        //     t.equal(p.length, 6);
-        //     t.notOk(p[p.length - 1] === 0);
-        //     t.end();
-        // });
-
-        // test('GF256Tests eval', function (t) {
-        //     t.plan(1);
-        //     const v = GF256.eval([1, 0, 2, 3], 2);
-        //     t.equal(v, 17);
-        // });
+        [Fact]
+        public void GF256TestsGenerate()
+        {
+            Field gf256 = new Field();
+            byte[] p = gf256.generate((Func<uint, byte[]>) zeroLastByteFirstTWoAttemptsRandomBytes, 5, 20);
+            Assert.Equal(20, p[0]);
+            Assert.Equal(6, p.Length);
+            Assert.NotEqual(0, p[p.Length-1]);
+        }
     }
 }
