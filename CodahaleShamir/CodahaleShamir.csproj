@@ -1,14 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <PackageId>Codahale.Shamir.DotNet</PackageId>
+    <PackageId>CodahaleShamir</PackageId>
     <Version>1.0.0</Version>
     <Authors>pad01g</Authors>
     <Company>pad01g</Company>
 
 
     <TargetFramework>net6.0</TargetFramework>
-    <RootNamespace>nuget_codahale_shamir</RootNamespace>
+    <RootNamespace>CodahaleShamir</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
