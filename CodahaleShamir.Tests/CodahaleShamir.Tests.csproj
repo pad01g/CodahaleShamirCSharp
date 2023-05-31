@@ -26,14 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="com.codahale.shamir">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>./ext/shamir-0.7.0.dll</HintPath>
-    </Reference>
-    <Reference Include="java">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>./ext/IKVM.OpenJDK.Core.dll</HintPath>
-    </Reference>
-	</ItemGroup>
-
+    <EmbeddedResource Include=".\ext\**\*.js" />
+  </ItemGroup>
 </Project>
