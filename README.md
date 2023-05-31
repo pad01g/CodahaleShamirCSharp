@@ -2,6 +2,8 @@
 
 Shamir Secret Sharing Scheme implementation by C#. This library is compatible with https://github.com/codahale/shamir .
 
+[![NuGet version](https://badge.fury.io/nu/CodahaleShamir.svg)](https://badge.fury.io/nu/CodahaleShamir)
+
 # Build
 
 ```
