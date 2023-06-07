@@ -1,4 +1,6 @@
-﻿namespace CodahaleShamir.GF256
+﻿using System;
+
+namespace CodahaleShamir.GF256
 {
     public class Field
     {

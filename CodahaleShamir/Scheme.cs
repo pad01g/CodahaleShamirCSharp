@@ -1,5 +1,6 @@
 using CodahaleShamir.GF256;
 using System.Collections.Generic;
+using System;
 
 namespace CodahaleShamir.Scheme
 {
@@ -71,8 +72,8 @@ namespace CodahaleShamir.Scheme
                 lengths[lengthIndex] = (uint) part.Value.Length;
                 lengthIndex++;
             }
-            uint max = lengths.Max();
-            uint min = lengths.Min();
+            uint max = Max(lengths);
+            uint min = Min(lengths);
             if (max != min) {
                 throw new Exception($"Varying lengths of part values. Min {min}, Max {max}");
             }
@@ -99,6 +100,32 @@ namespace CodahaleShamir.Scheme
             }
 
             return secret;
+        }
+
+        private uint Max(uint[] arr){
+            if (arr.Length == 0){
+                return 0;
+            }
+            uint max = arr[0];
+            for(int i = 0; i < arr.Length; i++){
+                if (arr[i] > max){
+                    max = arr[i];
+                }
+            }
+            return max;
+        }
+
+        private uint Min(uint[] arr){
+            if (arr.Length == 0){
+                return 0;
+            }
+            uint min = arr[0];
+            for(int i = 0; i < arr.Length; i++){
+                if (arr[i] < min){
+                    min = arr[i];
+                }
+            }
+            return min;
         }
     }
 }
